@@ -12,20 +12,37 @@ class IndexController extends Controller {
             $re[$key]=$value;
         }
         $result["list"]=$re;
+
+
         echo json_encode($result,true);
     }
 
-    //数据新增或者修改
+    public function  modData(){
 
-    public function moddata(){
+        //解决跨域请求问题
         $this->init();
-        echo I("post");
-    }
+        echo var_dump(I("post.msg"));
+        exit;
+        //获取数据添加到数据库
+        $map['f_id']=I("post.f_id");
+        $map['f_name']=I("post.f_name");
+        $map['f_sex']=I("post.f_sex");
+        $map['f_phone']=I("post.f_phone");
 
+        if(I("post.f_id")){
+            //添加
+            $re2=M("user")->add($map);
+        }else{
+            //编辑
+            $re2=M("user")->save($map);
+
+        }
+    }
 
     public  function  init(){
         header('Access-Control-Allow-Origin:http://angular_1.0_client.com');
-        header("Content-Type: application/json; charset=UTF-8");
+        header('Access-Control-Request-Method: GET, POST');
+        header('Access-Control-Allow-Credentials: true');
     }
 
 }
